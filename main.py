@@ -17,7 +17,7 @@ f = fopen("./Controller/param.txt",'r')
 lines = f.readlines()
 for i in range(len(lines)):
     if i[0] == "Conv2D":
-        model.add(tf.keras.layers.Conv2D(i[1], (i[2], i[2]), activation='relu', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.Conv2D(i[1], (i[2], i[2]), activation='relu', input_shape=(240, 240, 1)))
     else:
         model.add(tf.keras.layers.MaxPooling2D((i[1], i[1])))
 

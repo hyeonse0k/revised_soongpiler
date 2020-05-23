@@ -7,8 +7,8 @@
   var captureButton = document.getElementById('capture');
   var saveButton = document.getElementById('save');
   var isPressed = false;
-  var old_v = "null";
   var count = 0;
+  //var canvas = document.getElementById("snapshot");
 
   var handleSuccess = function(stream) {
     player.srcObject = stream;
@@ -27,20 +27,13 @@
       var context = snapshot.getContext('2d');
       context.drawImage(player, 0, 0, snapshotCanvas.width,
           snapshotCanvas.height);
-      var v = $('#class').val()
-      if(v != old_v)
-        count = 0;
-      old_v = v;
-      count += 1;
-
-      console.log(v,count);
-      //console.log(count);
       var photo = snapshot.toDataURL('image/jpeg');
-      var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
         method: 'POST',
         url: 'testSave.php',
-        data: parameter
+        data: {
+          photo: photo
+        }
       });
       setTimeout(function() {
       doInterval(action);
@@ -61,17 +54,35 @@
       x:<input type="text" name="kind" />
       y:<input type="text" name="var1" />
       w:<input type="text" name="var2" />
-      class:<input type="text" name="class" id="class"/>
       <input type="submit" value="생성" />
     </form>
     <div>
       첫번째 영역
+      <img src="createBox.php?size=50&channel=50" />
       <?php
           $file=fopen("param.txt", "r");
+          (int)$size = 240;
           while(!feof($file)){
             $str = fgets($file, 999);
             $str = trim($str);
             $arr = explode(" ", $str);
+            #echo $arr[1]." ";
+            if(!strcmp($arr[0], "Conv2D")){
+              
+              $channel = (int)$arr[1];
+              echo "Conv2d ";
+              echo $size = (int)$size - (int)$arr[2] + 1;
+              #echo $arr[0]." ";
+              #echo $arr[1]." ";
+              #echo $arr[2]." ";
+            }
+            else if(!strcmp($arr[0], "max")){
+              echo "max ";
+              echo (int)$size = (int)$size / (int)$arr[1];
+              #echo $arr[0]." "
+              #echo $arr[1]." ";
+            }
+            echo "<img src="."\"createBox.php?size=".$size."\" />";
           }
           fclose($file);
       ?>
