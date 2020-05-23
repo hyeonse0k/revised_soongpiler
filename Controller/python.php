@@ -1,14 +1,14 @@
 <video id="player" controls autoplay></video>
 <button id="capture">Capture</button>
-<canvas id="snapshot" width=320 height=240></canvas>
+<canvas id="snapshot" width=240 height=240></canvas>
 <script>
   var player = document.getElementById('player');
   var snapshotCanvas = document.getElementById('snapshot');
   var captureButton = document.getElementById('capture');
   var saveButton = document.getElementById('save');
   var isPressed = false;
+  var old_v = "null";
   var count = 0;
-  //var canvas = document.getElementById("snapshot");
 
   var handleSuccess = function(stream) {
     player.srcObject = stream;
@@ -27,13 +27,20 @@
       var context = snapshot.getContext('2d');
       context.drawImage(player, 0, 0, snapshotCanvas.width,
           snapshotCanvas.height);
+      var v = $('#class').val()
+      if(v != old_v)
+        count = 0;
+      old_v = v;
+      count += 1;
+
+      console.log(v,count);
+      //console.log(count);
       var photo = snapshot.toDataURL('image/jpeg');
+      var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
         method: 'POST',
         url: 'testSave.php',
-        data: {
-          photo: photo
-        }
+        data: parameter
       });
       setTimeout(function() {
       doInterval(action);
@@ -54,6 +61,7 @@
       x:<input type="text" name="kind" />
       y:<input type="text" name="var1" />
       w:<input type="text" name="var2" />
+      class:<input type="text" name="class" id="class"/>
       <input type="submit" value="생성" />
     </form>
     <div>

@@ -2,4 +2,5 @@ Conv2D 32 3
 max 2   
 Conv2D 64 3  
 max 2   
-Conv2D 64 3
+Conv2D 64 31 2 3  
+1 2 3  
