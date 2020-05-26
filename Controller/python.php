@@ -65,8 +65,6 @@
       <input type="submit" value="생성" />
     </form>
     <div>
-      첫번째 영역
-      <img src="createBox.php?size=50&channel=50" />
       <?php
           $file=fopen("param.txt", "r");
           (int)$size = 240;
@@ -79,18 +77,19 @@
 
               $channel = (int)$arr[1];
               #echo "Conv2d ";
-              echo $size = (int)$size - (int)$arr[2] + 1;
+              $size = (int)$size - (int)$arr[2] + 1;
               #echo $arr[0]." ";
               #echo $arr[1]." ";
               #echo $arr[2]." ";
             }
             else if(!strcmp($arr[0], "max")){
               #echo "max ";
-              echo (int)$size = (int)$size / (int)$arr[1];
+              (int)$size = (int)$size / (int)$arr[1];
               #echo $arr[0]." "
               #echo $arr[1]." ";
             }
-            echo "<img src="."\"createBox.php?size=".$size."\" />";
+            if($arr[1] != 0)
+              echo "<img src="."\"createBox.php?size=".$size."\" />";
           }
           fclose($file);
       ?>
