@@ -97,28 +97,22 @@
       <?php
           $file=fopen("param.txt", "r");
           (int)$size = 240;
+          $option = 0;
           while(!feof($file)){
             $str = fgets($file, 999);
             $str = trim($str);
             $arr = explode(" ", $str);
-            #echo $arr[1]." ";
             if(!strcmp($arr[0], "Conv2D")){
-
               $channel = (int)$arr[1];
-              #echo "Conv2d ";
               $size = (int)$size - (int)$arr[2] + 1;
-              #echo $arr[0]." ";
-              #echo $arr[1]." ";
-              #echo $arr[2]." ";
+              $option = 1;
             }
             else if(!strcmp($arr[0], "max")){
-              #echo "max ";
               (int)$size = (int)$size / (int)$arr[1];
-              #echo $arr[0]." "
-              #echo $arr[1]." ";
+              $option = 2;
             }
             if($arr[1] != 0)
-              echo "<img src="."\"createBox.php?size=".$size."\" />";
+              echo "<img src="."\"createBox.php?size=".$size."&channel=".$channel."&option=".$option."\" />";
           }
           fclose($file);
       ?>
