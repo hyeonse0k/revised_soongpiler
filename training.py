@@ -36,8 +36,8 @@ train_images = np.array(train_images)
 test_labels = np.array(test_labels)
 train_labels = np.array(train_labels)
 
-train_images = train_images.reshape(train_images.shape[0],280,280,3)
-test_images = test_images.reshape(test_images.shape[0],280,280,3)
+train_images = train_images.reshape(train_images.shape[0],240,240,3)
+test_images = test_images.reshape(test_images.shape[0],240,240,3)
 #이미지 읽어와서 reshape 끝
 
 # 픽셀 값을 0~1 사이로 정규화합니다.
@@ -55,7 +55,7 @@ for i in range(len(lines)):
     else:
         model.add(tf.keras.layers.MaxPooling2D((i[1], i[1])))
 """
-model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(280, 280, 3)))
+model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(240, 240, 3)))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
 model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
@@ -65,7 +65,7 @@ model.summary()
 
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(64, activation='relu'))
-model.add(tf.keras.layers.Dense(3, activation='softmax'))
+model.add(tf.keras.layers.Dense(2, activation='softmax'))
 
 model.summary()
 
@@ -73,8 +73,9 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, train_labels, epochs=20)
+model.fit(train_images, train_labels, epochs=10)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-os.mkdir("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result")
+if not os.path.exists("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result"):
+    os.mkdir("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result")
 model.save("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result\my_model.h5")
