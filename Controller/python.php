@@ -102,11 +102,19 @@
 </head>
   <body>
     <form method="POST" action="inputtxt.php">
-      x:<input type="text" name="kind" />
-      y:<input type="text" name="var1" />
-      w:<input type="text" name="var2" />
+      <input type="text" name="kind" value="Conv2D" />
+      filters:<input type="text" name="var1" />
+      kernel_size:<input type="text" name="var2" />
       class:<input type="text" name="class" id="class"/>
       <input type="submit" value="생성" />
+    </form>
+    <form method="POST" action="inputtxt.php">
+      <input type="text" name="kind" value="MaxPooling2D"/>
+      pool_size:<input type="text" name="var1" />
+      <input type="submit" value="생성" />
+    </form>
+    <form method="POST" action="deltxt.php">
+      <input type="submit" value="삭제" />
     </form>
     <div>
       <?php
@@ -118,16 +126,17 @@
             $str = trim($str);
             $arr = explode(" ", $str);
             if(!strcmp($arr[0], "Conv2D")){
-              $channel = (int)$arr[1];
-              $size = (int)$size - (int)$arr[2] + 1;
+              (int)$channel = (int)$arr[1];
+              (int)$size = (int)$size - (int)$arr[2] + (int)1;
               $option = 1;
             }
-            else if(!strcmp($arr[0], "max")){
+            else if(!strcmp($arr[0], "MaxPooling2D")){
               (int)$size = (int)$size / (int)$arr[1];
               $option = 2;
             }
-            if($arr[1] != 0)
+            if($arr[1] != 0){
               echo "<img src="."\"createBox.php?size=".$size."&channel=".$channel."&option=".$option."\" />";
+            }
           }
           fclose($file);
       ?>
