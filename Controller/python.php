@@ -1,6 +1,7 @@
 <video id="player" controls autoplay></video>
 <button id="capture">Capture</button>
 <button id="done">Done</button>
+<button id="MLstart">Machine Learning Start</button>
 <canvas id="snapshot" width=240 height=240></canvas>
 <script>
   var player = document.getElementById('player');
@@ -17,6 +18,21 @@
   var doneSuccess = function(stream){
     player.srcObject = stream;
   }
+  //ML 학습을 시작하기 위한 var
+  var startButton = document.getElementById('MLstart');
+  function startML(action){
+    var memo = "start";
+    console.log(memo);
+    $.ajax({
+      method: 'POST',
+      url: 'ml_start.php',
+      data: memo
+    });
+  }
+  startButton.addEventListener('click',function(event){
+    startML();
+  })
+
 
   function autoSnapshot(action){
     var auto_context = snapshot.getContext('2d');
@@ -25,7 +41,7 @@
     var auto = "auto";
     var auto_parameter = {photo: auto_photo , class: auto, count_value: snap_count}
     snap_count++;
-    console.log(snap_count);
+    //console.log(snap_count);
     $.ajax({
       method: 'POST',
       url: 'testSave.php',
@@ -63,7 +79,7 @@
       old_v = v;
       count += 1;
 
-      console.log(v,count);
+      //console.log(v,count);
       var photo = snapshot.toDataURL('image/jpeg');
       var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
@@ -84,7 +100,6 @@
 <head>
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
-
   <body>
     <form method="POST" action="inputtxt.php">
       x:<input type="text" name="kind" />

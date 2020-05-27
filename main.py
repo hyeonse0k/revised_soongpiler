@@ -5,7 +5,7 @@ import shutil
 import numpy as np
 import PIL.Image as pilimg
 
-path = "C:/Bitnami/wampstack-7.3.17-0/apache2/htdocs/Controller/photos/"
+path = "C:/Bitnami/wampstack-7.3.18-0/apache2/htdocs/Controller/photos/"
 class_list = os.listdir(path)
 train_images = []
 test_images = []
@@ -77,4 +77,4 @@ model.fit(train_images, train_labels, epochs=5)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 
-print(test_acc)
+model.save('my_model.h5')
