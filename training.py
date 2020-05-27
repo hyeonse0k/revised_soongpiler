@@ -12,8 +12,8 @@ test_images = []
 train_labels = []
 test_labels = []
 
+count = 0
 for CLASS in class_list:
-    count = 1
     file_name = os.listdir(path + CLASS + "/" + "train")
     for file in file_name:
         im = pilimg.open(path + CLASS + "/" + "train/" + file)
@@ -21,6 +21,7 @@ for CLASS in class_list:
         pix = pix.flatten()
         train_images.append(pix)
         train_labels.append(count)
+        data = (file,count)
     file_name = os.listdir(path + CLASS + "/" + "test")
     for file in file_name:
         im = pilimg.open(path + CLASS + "/" + "test/" + file)
@@ -30,14 +31,13 @@ for CLASS in class_list:
         test_labels.append(count)
     count += 1
 
-
 test_images = np.array(test_images)
 train_images = np.array(train_images)
 test_labels = np.array(test_labels)
 train_labels = np.array(train_labels)
 
-train_images = train_images.reshape(train_images.shape[0],240,240,3)
-test_images = test_images.reshape(test_images.shape[0],240,240,3)
+train_images = train_images.reshape(train_images.shape[0],280,280,3)
+test_images = test_images.reshape(test_images.shape[0],280,280,3)
 #이미지 읽어와서 reshape 끝
 
 # 픽셀 값을 0~1 사이로 정규화합니다.
@@ -55,7 +55,7 @@ for i in range(len(lines)):
     else:
         model.add(tf.keras.layers.MaxPooling2D((i[1], i[1])))
 """
-model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(240, 240, 3)))
+model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(280, 280, 3)))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
 model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
 model.add(tf.keras.layers.MaxPooling2D((2, 2)))
@@ -65,7 +65,7 @@ model.summary()
 
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(64, activation='relu'))
-model.add(tf.keras.layers.Dense(2, activation='softmax'))
+model.add(tf.keras.layers.Dense(3, activation='softmax'))
 
 model.summary()
 
@@ -73,8 +73,8 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, train_labels, epochs=5)
+model.fit(train_images, train_labels, epochs=20)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-
-model.save('my_model.h5')
+os.mkdir("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result")
+model.save("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result\my_model.h5")

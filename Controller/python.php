@@ -2,7 +2,7 @@
 <button id="capture">Capture</button>
 <button id="done">Done</button>
 <button id="MLstart">Machine Learning Start</button>
-<canvas id="snapshot" width=240 height=240></canvas>
+<canvas id="snapshot" width=280 height=280></canvas>
 <script>
   var player = document.getElementById('player');
   var snapshotCanvas = document.getElementById('snapshot');
