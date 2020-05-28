@@ -1,5 +1,9 @@
 <?php
-$route = "C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Controller/photos/";
+$class = $_POST['class'];
+if($class == "auto")
+  $route = "C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Controller/ML_result/";
+else
+  $route = "C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Controller/photos/";
 mkdir("C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Controller/photos/");
 
 $data = $_POST['photo'];
