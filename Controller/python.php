@@ -33,7 +33,6 @@
     startML();
   })
 
-
   function autoSnapshot(action){
     var auto_context = snapshot.getContext('2d');
     auto_context.drawImage(player, 0, 0, snapshotCanvas.width,snapshotCanvas.height);
@@ -41,16 +40,20 @@
     var auto = "auto";
     var auto_parameter = {photo: auto_photo , class: auto, count_value: snap_count}
     snap_count++;
-    //console.log(snap_count);
     $.ajax({
       method: 'POST',
-      url: 'testSave.php',
-      data: auto_parameter
+      url: 'saveSnapshot.php',
+      //async: false,
+      data: auto_parameter,
+    }).done(function(json) {
+      jsonObj = JSON.parse(json);
+      console.log(jsonObj["result"]);
     });
     setTimeout(function() {
     autoSnapshot(action);
   }, 1000);
   }
+
   doneButton.addEventListener('click',function(event){
     navigator.mediaDevices.getUserMedia({video: true})
         .then(doneSuccess);
@@ -84,7 +87,7 @@
       var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
         method: 'POST',
-        url: 'testSave.php',
+        url: 'saveCapture.php',
         data: parameter
       });
       setTimeout(function() {

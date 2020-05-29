@@ -47,7 +47,7 @@ model = tf.keras.models.Sequential()
 
 #입력받은 txt 파일에서 값을 받아와 conv2d, maxpooling2d파일 실행하기
 """
-f = fopen("C:/Bitnami/wampstack-7.3.17-0/apache2/htdocs/Controller/param.txt",'r')
+f = open("C:/Bitnami/wampstack-7.3.17-0/apache2/htdocs/Controller/param.txt",'r')
 lines = f.readlines()
 for i in range(len(lines)):
     if i[0] == "Conv2D":
@@ -65,7 +65,7 @@ model.summary()
 
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(64, activation='relu'))
-model.add(tf.keras.layers.Dense(2, activation='softmax'))
+model.add(tf.keras.layers.Dense(3, activation='softmax'))
 
 model.summary()
 
@@ -76,6 +76,6 @@ model.compile(optimizer='adam',
 model.fit(train_images, train_labels, epochs=10)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
-if not os.path.exists("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result"):
-    os.mkdir("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result")
-model.save("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\ML_result\my_model.h5")
+if not os.path.exists("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\\result"):
+    os.mkdir("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\\result")
+model.save("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\\result\my_model.h5")
