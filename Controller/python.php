@@ -22,7 +22,6 @@
   var startButton = document.getElementById('MLstart');
   function startML(action){
     var memo = "start";
-    console.log(memo);
     $.ajax({
       method: 'POST',
       url: 'ml_start.php',
@@ -39,19 +38,21 @@
     var auto_photo = snapshot.toDataURL('image/jpeg');
     var auto = "auto";
     var auto_parameter = {photo: auto_photo , class: auto, count_value: snap_count}
+    var result;
     snap_count++;
     $.ajax({
       method: 'POST',
       url: 'saveSnapshot.php',
-      //async: false,
+      async: false,
       data: auto_parameter,
     }).done(function(json) {
       jsonObj = JSON.parse(json);
-      console.log(jsonObj["result"]);
+      result = jsonObj['result'];
     });
     setTimeout(function() {
     autoSnapshot(action);
   }, 1000);
+  $('#result').val(result);
   }
 
   doneButton.addEventListener('click',function(event){
@@ -82,7 +83,6 @@
       old_v = v;
       count += 1;
 
-      //console.log(v,count);
       var photo = snapshot.toDataURL('image/jpeg');
       var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
@@ -108,8 +108,9 @@
       <input type="text" name="kind" value="Conv2D" />
       filters:<input type="text" name="var1" />
       kernel_size:<input type="text" name="var2" />
-      class:<input type="text" name="class" id="class"/>
       <input type="submit" value="생성" />
+      class: <input type="text" name="class" id="class"/>
+      result: <input type="text" name="result" id="result"/>
     </form>
     <form method="POST" action="inputtxt.php">
       <input type="text" name="kind" value="MaxPooling2D"/>

@@ -14,6 +14,8 @@ test_labels = []
 
 count = 0
 for CLASS in class_list:
+    if CLASS == "class_label.txt":
+        continue
     file_name = os.listdir(path + CLASS + "/" + "train")
     for file in file_name:
         im = pilimg.open(path + CLASS + "/" + "train/" + file)
@@ -46,26 +48,30 @@ train_images, test_images = train_images / 255.0, test_images / 255.0
 model = tf.keras.models.Sequential()
 
 #입력받은 txt 파일에서 값을 받아와 conv2d, maxpooling2d파일 실행하기
-"""
-f = open("C:/Bitnami/wampstack-7.3.17-0/apache2/htdocs/Controller/param.txt",'r')
+f = open("./Controller/param.txt",'r')
 lines = f.readlines()
-for i in range(len(lines)):
+for i in lines:
+    i = i.split(" ")
+    print(i)
     if i[0] == "Conv2D":
-        model.add(tf.keras.layers.Conv2D(i[1], (i[2], i[2]), activation='relu', input_shape=(240, 240, 3)))
+        model.add(tf.keras.layers.Conv2D(i[1], (int(i[2]), int(i[2])), activation='relu', input_shape=(240, 240, 3)))
     else:
-        model.add(tf.keras.layers.MaxPooling2D((i[1], i[1])))
-"""
-model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(240, 240, 3)))
-model.add(tf.keras.layers.MaxPooling2D((2, 2)))
-model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
-model.add(tf.keras.layers.MaxPooling2D((2, 2)))
-model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D((int(i[1]), int(i[1]))))
+
+#model.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(240, 240, 3)))
+#model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+#model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+#model.add(tf.keras.layers.MaxPooling2D((2, 2)))
+#model.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
 
 model.summary()
 
+label_file = open("./Controller/photos/class_label.txt",'r')
+class_count = label_file.readlines()
+class_count = len(class_count)
 model.add(tf.keras.layers.Flatten())
 model.add(tf.keras.layers.Dense(64, activation='relu'))
-model.add(tf.keras.layers.Dense(3, activation='softmax'))
+model.add(tf.keras.layers.Dense(class_count, activation='softmax'))
 
 model.summary()
 
@@ -73,7 +79,7 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels, epochs=5)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 if not os.path.exists("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\\result"):
