@@ -22,7 +22,6 @@
   var startButton = document.getElementById('MLstart');
   function startML(action){
     var memo = "start";
-    console.log(memo);
     $.ajax({
       method: 'POST',
       url: 'ml_start.php',
@@ -33,24 +32,29 @@
     startML();
   })
 
-
   function autoSnapshot(action){
     var auto_context = snapshot.getContext('2d');
     auto_context.drawImage(player, 0, 0, snapshotCanvas.width,snapshotCanvas.height);
     var auto_photo = snapshot.toDataURL('image/jpeg');
     var auto = "auto";
     var auto_parameter = {photo: auto_photo , class: auto, count_value: snap_count}
+    var result;
     snap_count++;
-    //console.log(snap_count);
     $.ajax({
       method: 'POST',
-      url: 'testSave.php',
-      data: auto_parameter
+      url: 'saveSnapshot.php',
+      async: false,
+      data: auto_parameter,
+    }).done(function(json) {
+      jsonObj = JSON.parse(json);
+      result = jsonObj['result'];
     });
     setTimeout(function() {
     autoSnapshot(action);
   }, 1000);
+  $('#result').val(result);
   }
+
   doneButton.addEventListener('click',function(event){
     navigator.mediaDevices.getUserMedia({video: true})
         .then(doneSuccess);
@@ -79,12 +83,11 @@
       old_v = v;
       count += 1;
 
-      //console.log(v,count);
       var photo = snapshot.toDataURL('image/jpeg');
       var parameter = {photo: photo , class: v, count_value: count}
       $.ajax({
         method: 'POST',
-        url: 'testSave.php',
+        url: 'saveCapture.php',
         data: parameter
       });
       setTimeout(function() {
@@ -101,12 +104,15 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
   <body>
+    <a href="tensorboard.php">텐서보드 서버 실행</a>
+    <a href="javascript:void(window.open('http://localhost:6006', '_blank'))">TensorBoard</a>
     <form method="POST" action="inputtxt.php">
       <input type="text" name="kind" value="Conv2D" />
       filters:<input type="text" name="var1" />
       kernel_size:<input type="text" name="var2" />
-      class:<input type="text" name="class" id="class"/>
       <input type="submit" value="생성" />
+      class: <input type="text" name="class" id="class"/>
+      result: <input type="text" name="result" id="result"/>
     </form>
     <form method="POST" action="inputtxt.php">
       <input type="text" name="kind" value="MaxPooling2D"/>
@@ -126,12 +132,12 @@
             $str = trim($str);
             $arr = explode(" ", $str);
             if(!strcmp($arr[0], "Conv2D")){
-              (int)$channel = (int)$arr[1];
-              (int)$size = (int)$size - (int)$arr[2] + (int)1;
+              $channel = $arr[1];
+              $size = $size - $arr[2] + 1;
               $option = 1;
             }
             else if(!strcmp($arr[0], "MaxPooling2D")){
-              (int)$size = (int)$size / (int)$arr[1];
+              $size = floor($size / $arr[1]);
               $option = 2;
             }
             if($arr[1] != 0){

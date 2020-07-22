@@ -2,16 +2,17 @@
  file_put_contents($_POST['title'], $_POST['code']);
 
  function javac(){
-   if(isFileExist() == 1) {
-     $exec = "javac Solution.java";
-     shell_exec($exec);
-     // echo $exec;
+  if(isFileExist() == 1) {
+    $exec = "C:\javac.exe -encoding utf-8 Solution.java";
+    shell_exec($exec);
+    // echo $exec;
 
-     // java를 통해 생성된 class 파일 실행
-     $output = shell_exec("java Solution");
-     echo $output;
-   }
- }
+    // java를 통해 생성된 class 파일 실행
+    $output = shell_exec("C:\java.exe Solution 10");
+    $output = iconv("EUC-KR","UTF-8",$output);
+    echo '<pre>'.$output.'</pre>';
+    }
+  }
 
  function isFileExist(){
    $location = "Solution.java";
@@ -22,10 +23,10 @@
    }
  }
 
- function fileDelete(){
-   unlink('Solution.java');
-   unlink('Solution.class');
- }
+ #function fileDelete(){
+#   unlink('C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Model\Solution.java');
+#   unlink('C:\Bitnami\wampstack-7.3.18-0\apache2\htdocs\Model\Solution.class');
+ #}
   ?>
    <head>
      <meta charset="utf-8">
@@ -49,7 +50,7 @@
      </form>
      <?php
      javac();
-     fileDelete();
+     #fileDelete();
       ?>
       <br>
       <a href="../index.html">돌아가기</a>

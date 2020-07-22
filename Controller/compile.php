@@ -1,12 +1,12 @@
 <?php
 function javac(){
   if(isFileExist() == 1) {
-    $exec = "javac Solution.java";
+    $exec = "C:\javac.exe Solution.java";
     shell_exec($exec);
     // echo $exec;
 
     // java를 통해 생성된 class 파일 실행
-    $output = shell_exec("java Solution");
+    $output = shell_exec("C:\java.exe Solution");
     echo $output;
   }
 }
@@ -56,9 +56,6 @@ $default = "public class Solution
     <예시 코드>
     <br>
     <img src="../model/example.PNG">
-    11111
-    <a href="python.php">파이썬</a>
-    <a href="exec.php">결과</a>
     <?php
     javac();
      ?>
