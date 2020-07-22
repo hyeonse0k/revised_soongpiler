@@ -104,6 +104,8 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
   <body>
+    <a href="tensorboard.php">텐서보드 서버 실행</a>
+    <a href="javascript:void(window.open('http://localhost:6006', '_blank'))">TensorBoard</a>
     <form method="POST" action="inputtxt.php">
       <input type="text" name="kind" value="Conv2D" />
       filters:<input type="text" name="var1" />
@@ -130,12 +132,12 @@
             $str = trim($str);
             $arr = explode(" ", $str);
             if(!strcmp($arr[0], "Conv2D")){
-              (int)$channel = (int)$arr[1];
-              (int)$size = (int)$size - (int)$arr[2] + (int)1;
+              $channel = $arr[1];
+              $size = $size - $arr[2] + 1;
               $option = 1;
             }
             else if(!strcmp($arr[0], "MaxPooling2D")){
-              (int)$size = (int)$size / (int)$arr[1];
+              $size = floor($size / $arr[1]);
               $option = 2;
             }
             if($arr[1] != 0){

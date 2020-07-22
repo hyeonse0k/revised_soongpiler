@@ -24,7 +24,7 @@
   fwrite($file,$text);
   fclose($file);
   if($count == 1){
-    sleep(5);
+    sleep(2);
   }
   #txt 파일 마지막 찾는 코드
   $file=fopen("./result/result.txt", "r");

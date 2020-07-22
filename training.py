@@ -4,6 +4,7 @@ import sys
 import shutil
 import numpy as np
 import PIL.Image as pilimg
+import datetime
 
 path = "C:/Bitnami/wampstack-7.3.18-0/apache2/htdocs/Controller/photos/"
 class_list = os.listdir(path)
@@ -48,7 +49,7 @@ train_images, test_images = train_images / 255.0, test_images / 255.0
 model = tf.keras.models.Sequential()
 
 #입력받은 txt 파일에서 값을 받아와 conv2d, maxpooling2d파일 실행하기
-f = open("./Controller/param.txt",'r')
+f = open("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller/param.txt",'r')
 lines = f.readlines()
 for i in lines:
     i = i.split(" ")
@@ -66,7 +67,7 @@ for i in lines:
 
 model.summary()
 
-label_file = open("./Controller/photos/class_label.txt",'r')
+label_file = open("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller/photos/class_label.txt",'r')
 class_count = label_file.readlines()
 class_count = len(class_count)
 model.add(tf.keras.layers.Flatten())
@@ -79,7 +80,9 @@ model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, train_labels, epochs=5)
+log_dir = "C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\logs\\" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
+model.fit(train_images, train_labels, epochs=5, callbacks=[tensorboard_callback])
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 if not os.path.exists("C:\Bitnami\wampstack-7.3.18-0\\apache2\htdocs\Controller\\result"):
